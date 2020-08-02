@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[32,)"
+license="MIT"
+[[mods]]
+modId="chunk"
+version="${file.jarVersion}"
+displayName="Azuredooms Chunk Loader Mod"
+authors="AzureDoomC" 
+credits="ufolov for the texture"
+description='''
+Adds a simple Chunk Loader.
+'''

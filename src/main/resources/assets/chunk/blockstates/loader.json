@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": [
+            { "model": "chunk:block/loader" }
+        ]
+    }
+}
