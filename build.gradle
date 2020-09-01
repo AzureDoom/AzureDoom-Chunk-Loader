@@ -20,7 +20,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
 
-version = "1.16.1-1.0.1"
+version = "1.16.2-1.0.1"
 group = 'mod.azure.chunk'
 archivesBaseName = 'AzureDoom-Chunk-Loader'
 
@@ -78,8 +78,8 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.93'
-	compile fg.deobf("curse.maven:JEI:2995910")
+    minecraft 'net.minecraftforge:forge:1.16.2-33.0.5'
+	compile fg.deobf("curse.maven:JEI:3031493")
 }
 
 jar {
