@@ -8,19 +8,19 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
 		classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
     }
 }
-
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
+apply plugin: 'com.matthewprenger.cursegradle'
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
-
-version = "1.16.3-1.0.0"
+version = "1.16.4-1.0.0"
 group = 'mod.azure.chunk'
 archivesBaseName = 'AzureDoom-Chunk-Loader'
 
@@ -35,7 +35,7 @@ sourceSets {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200723-1.16.1'
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
     //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -77,9 +77,24 @@ minecraft {
     }
 }
 
+repositories {
+	jcenter()
+	maven {
+        name = "jitpack"
+        url "https://jitpack.io"
+    }
+    maven {
+        url 'https://www.dogforce-games.com/maven/'
+    }
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
+}
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.0.0'
-	compile fg.deobf("curse.maven:JEI:3031493")
+    minecraft 'net.minecraftforge:forge:1.16.4-35.0.1'
+	compile fg.deobf("curse.maven:JEI:3078092")
 }
 
 jar {
@@ -110,18 +125,38 @@ publishing {
         }
     }
 }
+
 processResources {
-	doLast {   
+	doLast {
         def jsonMinifyStart = System.currentTimeMillis()
         def jsonMinified = 0
         def jsonBytesSaved = 0
-        fileTree(dir: outputs.files.asPath, include: '**/*.json').each {   
+        fileTree(dir: outputs.files.asPath, include: '**/*.json').each { 
             File file = it
             jsonMinified++
             def oldLength = file.length()
             file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
             jsonBytesSaved += oldLength - file.length()
-        }  
+        }
         println('Minified ' + jsonMinified + ' json files. Saved ' + jsonBytesSaved + ' bytes. Took ' + (System.currentTimeMillis() - jsonMinifyStart) + 'ms.')
+    }
+}
+
+curseforge {
+
+    def curseProp = new Properties()
+    File secretPropsFile = file("key.properties")
+    curseProp.load(secretPropsFile.newInputStream())
+
+    project {
+        apiKey = curseProp.getProperty('curseKey')
+        id = "399513"
+        releaseType = "release"
+        changelogType = 'text'
+        changelog = file('CHANGELOG.txt')
+        addGameVersion("1.16.3")
+        addGameVersion("1.16.4")
+        addGameVersion("Forge")
+        addGameVersion("Java 8")
     }
 }

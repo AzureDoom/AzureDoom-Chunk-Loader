@@ -1,1 +1,1 @@
-cmd /k gradlew.bat build
+cmd /k gradlew.bat curseforge
